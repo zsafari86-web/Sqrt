@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>🔲 سامانه جامع آموزش و سنجش روش مربع کامل</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+    --bg: #fff0f5;
+    --card-bg: rgba(255, 255, 255, 0.96);
+    --border-color: rgba(180, 100, 255, 0.35);
+    --text-color: #2a1a3d;
+    --text2-color: #4a2a6a;
+    --text3-color: #8060a0;
+    --accent-color: #9b2fff;
+    --accent2-color: #b55aff;
+    --gold-color: #f5a623;
+    --green-color: #2ecc71;
+    --red-color: #e74c3c;
+    --pink-color: #ff6b8a;
+    --card-shadow: 0 8px 30px rgba(160, 80, 255, 0.12);
+    --btn-shadow: 0 4px 16px rgba(160, 80, 255, 0.25);
+}
+body {
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    background: var(--bg);
+    background-image: radial-gradient(circle at 0% 0%, #e6ccff 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, #ffd1eb 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    padding: 10px 8px;
+    min-height: 100vh;
+}
+.wrap { max-width: 680px; margin: 0 auto; }
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    box-shadow: var(--card-shadow);
+    padding: 16px 12px;
+    margin-bottom: 12px;
+}
+.title { font-size: 1.25rem; font-weight: 800; color: var(--accent-color); text-align:center; margin-bottom: 12px; }
+
+/* نشان نام دانش آموز در بالای صفحه */
+.student-badge-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.student-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1.5px dashed var(--accent-color);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent2-color);
+    box-shadow: 0 2px 8px rgba(155, 47, 255, 0.1);
+}
+
+/* پاورقی نام طراح */
+.app-footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text3-color);
+    padding: 14px 6px;
+    margin-top: 14px;
+    border-top: 1px dashed rgba(180, 100, 255, 0.3);
+}
+
+/* منوی دکمه‌ای مدرن ۲ در ۳ */
+.nav-dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+}
+@media (max-width: 440px) {
+    .nav-dashboard { grid-template-columns: repeat(2, 1fr); }
+}
+.nav-btn {
+    padding: 10px 4px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border-color);
+    background: rgba(255,255,255,0.85);
+    color: var(--text2-color);
+    font-weight: 700;
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all .2s ease;
+    text-align: center;
+    font-family: 'Vazirmatn', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+.nav-btn .icon { font-size: 1.15rem; }
+.nav-btn.active {
+    background: linear-gradient(135deg, var(--accent-color), var(--pink-color));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: var(--btn-shadow);
+    transform: translateY(-2px);
+}
+.page { display:none; }
+.page.active { display:block; animation: fadeIn .25s ease; }
+@keyframes fadeIn { from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+/* فرمول‌ها و ایزولاسیون ریاضی */
+bdi[dir="ltr"], .math-inline {
+    direction: ltr !important;
+    unicode-bidi: isolate !important;
+    display: inline-block;
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-weight: bold;
+    margin: 0 2px;
+    vertical-align: middle;
+}
+.formula-box {
+    text-align: center;
+    direction: ltr !important;
+    unicode-bidi: isolate;
+    font-family: 'Cambria Math', serif;
+    font-size: 1.18rem;
+    background: rgba(240,220,255,0.6);
+    border-radius: 12px;
+    padding: 10px;
+    margin: 8px 0;
+    font-weight: bold;
+}
+.frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 2px;
+    font-family: 'Cambria Math', serif;
+    font-size: 0.9em;
+    direction: ltr !important;
+    unicode-bidi: isolate;
+}
+.frac .num { border-bottom: 1.5px solid currentColor; padding: 0 3px; line-height: 1.15; text-align: center; }
+.frac .den { padding: 0 3px; line-height: 1.15; text-align: center; }
+.op { color: var(--text3-color); margin: 0 2px; }
+sup { font-size: 0.7em; vertical-align: super; line-height: 0; }
+
+.lesson-block { margin-bottom: 14px; text-align: right; direction: rtl; }
+.lesson-block h4 { color: var(--accent2-color); margin-bottom: 5px; font-size: 1rem; font-weight: 800; text-align: right;}
+.lesson-block p { color: var(--text2-color); font-size: 0.92rem; line-height: 1.9; text-align: justify; }
+
+/* دکمه‌ها */
+.btn {
+    border:none; border-radius:12px; padding:8px 16px; font-weight:700;
+    cursor:pointer; font-size:0.88rem; box-shadow: var(--btn-shadow);
+    transition:.2s; font-family: 'Vazirmatn', sans-serif;
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+}
+.btn:active { transform: scale(0.96); }
+.btn-main { background: linear-gradient(135deg, var(--accent-color), var(--pink-color)); color:#fff; }
+.btn-pink { background: linear-gradient(135deg, #ff6b8a, #ff9ab0); color:#fff; }
+.btn-exam { background: linear-gradient(135deg, #ff9a5a, #ff4e50); color: #fff; box-shadow: 0 4px 15px rgba(255, 78, 80, 0.4); }
+.btn-ghost { background: rgba(255,255,255,0.7); color: var(--accent-color); border: 1.5px solid var(--border-color); box-shadow:none; }
+.btn-ghost.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+.btn-row { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
+.btn:disabled { opacity:0.5; cursor:default; pointer-events:none; }
+
+/* کادرهای مراحل */
+.step-box {
+    border-right: 4px solid var(--accent-color);
+    background: rgba(255,255,255,0.75);
+    border-radius: 12px;
+    padding: 12px 10px;
+    margin-bottom: 10px;
+    animation: fadeIn .3s ease;
+    text-align: right;
+    direction: rtl;
+}
+.step-label { font-weight:800; margin-bottom: 8px; font-size:0.95rem; color:var(--accent2-color); line-height: 1.7;}
+.step-eq {
+    direction: ltr !important;
+    unicode-bidi: isolate;
+    text-align: center;
+    font-family: 'Cambria Math', serif;
+    font-size: 1.15rem;
+    background: rgba(240,220,255,0.45);
+    border-radius: 10px;
+    padding: 10px 6px;
+    margin: 8px 0;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.input-row { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; margin-bottom: 6px; direction: ltr;}
+.input-row label { font-weight:700; color: var(--text2-color); font-family:'Cambria Math', serif; font-size: 1rem;}
+
+.input-row input { 
+    width: 52px; padding: 6px 2px; border-radius: 8px; border: 1.5px solid var(--border-color); 
+    text-align: center; direction: ltr !important; unicode-bidi: bidi-override;
+    font-size: 1rem; background: #fff; font-family: 'Cambria Math', Tahoma, sans-serif;
+    color: var(--text-color); font-weight: bold;
+}
+.input-row input:focus { outline:none; border-color: var(--accent-color); }
+.input-row input:disabled { background-color: #f2e8ff; color: #2a1a3d; border-color: #d8b4fe; opacity: 1; }
+
+.feedback { border-radius: 10px; padding: 10px; margin-top: 8px; font-size: 0.9rem; line-height:1.7; display:none; direction: rtl; text-align: right; }
+.feedback.show { display:block; animation: shake .35s ease; }
+.feedback.ok { background: rgba(46,204,113,0.12); border:1.5px solid var(--green-color); color:#125e31; }
+.feedback.err { background: rgba(231,76,60,0.12); border:1.5px solid var(--red-color); color:#a12e22; }
+.feedback.warn { background: rgba(245, 166, 35, 0.15); border:1.5px solid var(--gold-color); color:#8a5600; font-weight: 600; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+.progress-pill {
+    text-align: center;
+    font-size: 0.86rem;
+    color: #fff;
+    background: var(--text3-color);
+    padding: 5px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    margin: 0 auto 10px auto;
+    font-weight: bold;
+    direction: rtl;
+}
+.progress-pill.exam { background: linear-gradient(135deg, #ff9a5a, #ff4e50); }
+.center-pill { display: flex; justify-content: center; }
+.result-final { text-align:center; background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(155,47,255,0.10)); border:1.5px solid var(--green-color); border-radius:12px; padding:12px; margin-top:8px; font-size:1.05rem; direction:ltr; font-family:'Cambria Math', serif; font-weight: bold;}
+.highlight-eq { display: block; text-align: center; font-size: 1.15rem; font-weight: bold; direction: ltr; margin-top: 8px; background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 8px; border: 1.5px dashed var(--green-color); color: #0b662a; font-family: 'Cambria Math', serif; }
+
+/* سطر ۳ تایی منظم */
+.three-inputs-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    direction: ltr;
+    margin: 8px 0;
+    width: 100%;
+}
+.input-col-card {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.85);
+    padding: 6px 4px;
+    border-radius: 8px;
+    border: 1px dashed var(--border-color);
+}
+.input-col-card label { font-size: 0.95rem; margin-right: 4px; font-family: 'Cambria Math', serif; font-weight: bold; }
+.input-col-card input { width: 44px; padding: 5px 2px; font-size: 0.95rem; text-align: center; border-radius: 6px; border: 1.5px solid var(--border-color); font-weight: bold; }
+
+/* شجره‌نامه تمرین ۲ */
+.derivation-container {
+    position: relative;
+    padding-right: 22px;
+}
+.derivation-container::before {
+    content: '';
+    position: absolute;
+    right: 9px;
+    top: 15px;
+    bottom: 15px;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent-color), var(--pink-color));
+    border-radius: 4px;
+    opacity: 0.35;
+}
+.tree-step { position: relative; margin-bottom: 14px; }
+.tree-node-bullet {
+    position: absolute;
+    right: -23px;
+    top: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-color), var(--pink-color));
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(155,47,255,0.35);
+    z-index: 2;
+}
+
+/* سرنخ هوشمند */
+.hint-toggle {
+    background: none;
+    border: none;
+    color: var(--accent2-color);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    opacity: 0.85;
+    transition: opacity .2s;
+    font-family: 'Vazirmatn', sans-serif;
+}
+.hint-toggle:hover { opacity: 1; text-decoration: underline; }
+.hint-content {
+    display: none;
+    background: rgba(245, 166, 35, 0.12);
+    border: 1px dashed var(--gold-color);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.84rem;
+    color: #8c5a00;
+    margin-top: 6px;
+    line-height: 1.6;
+}
+
+/* شاخه‌های تفکیک ± */
+.branch-grid { display: flex; gap: 8px; margin-top: 8px; direction: ltr; }
+.branch-card {
+    flex: 1;
+    background: #fff;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.branch-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 6px;
+    font-family: 'Vazirmatn', sans-serif;
+}
+.branch-pos { background: var(--green-color); }
+.branch-neg { background: var(--red-color); }
+@media (max-width: 480px) { .branch-grid { flex-direction: column; } }
+
+/* مهره‌های جئوجبرا */
+.gm-node {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    border-radius: 6px;
+    padding: 2px 7px;
+    background: #fff;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 2px 6px rgba(155,47,255,0.25);
+    transition: transform .15s ease, background .15s ease;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+.gm-node:hover { transform: scale(1.08); background: #f6edff; }
+.gm-node:active { cursor: grabbing; transform: scale(1.15); background: var(--accent-color); color: #fff; }
+
+.gm-drop-bar {
+    width: 100%;
+    margin-top: 6px;
+    padding: 6px;
+    border-top: 2px dashed var(--border-color);
+    text-align: center;
+    color: var(--text3-color);
+    font-size: 0.85rem;
+    transition: all .2s;
+}
+.gm-drop-bar.active { border-top: 3px solid var(--accent-color); background: rgba(155, 47, 255, 0.08); color: var(--accent-color); font-weight: bold; }
+.gm-slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    min-height: 32px;
+    border: 2px dashed var(--accent-color);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    margin: 0 3px;
+    vertical-align: middle;
+    transition: all .2s;
+    font-size: 0.95rem;
+}
+.gm-slot.active { background: rgba(46, 204, 113, 0.25); border-color: var(--green-color); transform: scale(1.1); }
+
+/* استایل کارنامه آزمون */
+.report-card {
+    text-align: center;
+    background: #fff;
+    border: 2px solid var(--accent-color);
+    border-radius: 16px;
+    padding: 18px;
+    margin-top: 10px;
+    box-shadow: 0 6px 20px rgba(155,47,255,0.12);
+}
+.score-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-color), var(--pink-color));
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px auto;
+    box-shadow: 0 4px 15px rgba(155,47,255,0.3);
+}
+
+/* ==================== مدال دریافت نام دانش آموز ==================== */
+.name-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(42, 26, 61, 0.72);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    animation: fadeIn .3s ease;
+}
+.name-modal-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px 20px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(155, 47, 255, 0.35);
+    border: 2px solid var(--accent-color);
+}
+.name-modal-card input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    font-size: 1rem;
+    text-align: center;
+    font-family: 'Vazirmatn', sans-serif;
+    color: var(--text-color);
+    font-weight: bold;
+    margin: 16px 0;
+    outline: none;
+    transition: border-color .2s;
+}
+.name-modal-card input:focus { border-color: var(--accent-color); }
+
+/* ==================== کارت جشن و تشویق پایان تمرین ۲ ==================== */
+.celebration-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), #fff6fb);
+    border: 2.5px solid var(--accent-color);
+    border-radius: 18px;
+    padding: 22px 14px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(155, 47, 255, 0.2);
+    margin-top: 18px;
+    animation: zoomIn .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+}
+.celebration-flower-icon {
+    font-size: 3.2rem;
+    margin-bottom: 8px;
+    animation: bounce 1.2s infinite alternate;
+}
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+/* ==================== انیمیشن ریزش گل (Flower Shower) ==================== */
+.flower-petal {
+    position: fixed;
+    top: -50px;
+    z-index: 999999;
+    user-select: none;
+    pointer-events: none;
+    animation: fallDown linear forwards;
+}
+@keyframes fallDown {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.85);
+        opacity: 1;
+    }
+    85% {
+        opacity: 0.95;
+    }
+    100% {
+        transform: translateY(105vh) rotate(360deg) scale(1.15);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- مودال خوش‌آمدگویی و دریافت نام دانش‌آموز -->
+<div class="name-modal-overlay" id="name-modal">
+    <div class="name-modal-card">
+        <div style="font-size: 2.8rem; margin-bottom: 6px;">🌸👋</div>
+        <h3 style="color:var(--accent-color); font-size:1.25rem; font-weight:800; margin-bottom:6px;">به سامانه روش مربع کامل خوش آمدید!</h3>
+        <p style="color:var(--text2-color); font-size:0.92rem; line-height:1.8;">
+            لطفاً نام قشنگت رو وارد کن تا آموزش و کارنامه‌ات به نام خودت ثبت بشه:
+        </p>
+        <input type="text" id="student-name-input" placeholder="نام و نام خانوادگی خود را بنویسید..." autofocus />
+        <button class="btn btn-main" style="width:100%; padding:12px; font-size:1rem;" onclick="confirmStudentName()">
+            ورود و شروع یادگیری 🚀
+        </button>
+    </div>
+</div>
+
+<div class="wrap">
+    
+    <!-- سربرگ اصلی -->
+    <div style="text-align:center; margin-bottom: 8px;">
+        <div class="title">🔲 روش مربع کامل</div>
+        <div class="student-badge-container">
+            <div class="student-badge" id="student-badge" style="display:none;">
+                <span>دانش‌آموز کوشا:</span>
+                <span id="badge-name" style="color:var(--accent-color);"></span>
+                <span>🌸</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== منوی دکمه‌ای مدرن ۲ در ۳ ==================== -->
+    <div class="nav-dashboard">
+        <button class="nav-btn active" id="btn-nav-lesson" onclick="switchTab('lesson')">
+            <span class="icon">📖</span><span>درسنامه</span>
+        </button>
+        <button class="nav-btn" id="btn-nav-example" onclick="switchTab('example')">
+            <span class="icon">✍️</span><span>۷ مثال کامل</span>
+        </button>
+        <button class="nav-btn" id="btn-nav-practice" onclick="switchTab('practice')">
+            <span class="icon">🎯</span><span>تمرین ۱ (راهنما)</span>
+        </button>
+        <button class="nav-btn" id="btn-nav-drag" onclick="switchTab('drag')">
+            <span class="icon">🧩</span><span>تمرین ۲ (مستقل)</span>
+        </button>
+        <button class="nav-btn" id="btn-nav-exam" onclick="switchTab('exam')">
+            <span class="icon">📝</span><span>آزمون (سنجش)</span>
+        </button>
+        <button class="nav-btn" id="btn-nav-tool" onclick="switchTab('tool')">
+            <span class="icon">🧮</span><span>ماشین‌حل‌کننده</span>
+        </button>
+    </div>
+
+    <!-- ==================== بخش ۱: درسنامه ==================== -->
+    <div class="page active" id="page-lesson">
+        <div class="card">
+            <div class="title">🔲 روش مربع کامل چیه؟</div>
+            <div class="lesson-block">
+                <p>در این روش، ما سعی می‌کنیم یک طرف معادله‌ی درجه دوم را به شکل یک عبارت توان‌دار یعنی <bdi dir="ltr" class="math-inline">(x + k)<sup>2</sup></bdi> در بیاوریم تا با جذر گرفتن، به راحتی حل شود.</p>
+            </div>
+            <div class="lesson-block">
+                <h4>مرحله ۱: یک کردن ضریب <bdi dir="ltr" class="math-inline">x<sup>2</sup></bdi></h4>
+                <p>اگر ضریب <bdi dir="ltr" class="math-inline">x<sup>2</sup></bdi> (یعنی <bdi dir="ltr" class="math-inline">a</bdi>) عددی غیر از ۱ بود، باید <b>کل معادله</b> را بر آن عدد تقسیم کنیم.</p>
+            </div>
+            <div class="lesson-block">
+                <h4>مرحله ۲: جدا کردن عدد ثابت</h4>
+                <p>عدد بدون متغیر (یعنی <bdi dir="ltr" class="math-inline">c</bdi>) را به سمت راست معادله منتقل می‌کنیم:</p>
+                <div class="formula-box"><bdi dir="ltr">x<sup>2</sup> + bx = −c</bdi></div>
+            </div>
+            <div class="lesson-block">
+                <h4>مرحله ۳: اضافه کردن مربعِ نصفِ ضریب <bdi dir="ltr" class="math-inline">x</bdi></h4>
+                <p>ضریب <bdi dir="ltr" class="math-inline">x</bdi> (یعنی <bdi dir="ltr" class="math-inline">b</bdi>) را نصف کرده و به توان ۲ می‌رسانیم. عدد به‌دست‌آمده را <b>به هر دو طرف معادله</b> اضافه می‌کنیم:</p>
+                <div class="formula-box"><bdi dir="ltr">+ (<span class="frac"><span class="num">b</span><span class="den">2</span></span>)<sup>2</sup></bdi></div>
+            </div>
+            <div class="lesson-block">
+                <h4>مرحله ۴: ساختن پرانتز توان‌دار و جذر گرفتن</h4>
+                <p>حالا سمت چپ معادله تبدیل به یک «مربع کامل» شده است:</p>
+                <div class="formula-box"><bdi dir="ltr">(x + <span class="frac"><span class="num">b</span><span class="den">2</span></span>)<sup>2</sup> = </bdi> <span style="font-family:'Vazirmatn'; font-size:0.95rem;">عدد جدید</span></div>
+                <p>در نهایت از هر دو طرف جذر می‌گیریم (سمت راست حتماً ± می‌گیرد) و <bdi dir="ltr" class="math-inline">x</bdi> را پیدا می‌کنیم.</p>
+            </div>
+            <div class="btn-row"><button class="btn btn-main" onclick="switchTab('example')">بریم مثال‌ها رو ببینیم ←</button></div>
+        </div>
+    </div>
+
+    <!-- ==================== بخش ۲: مثال‌ها (۷ مثال کامل) ==================== -->
+    <div class="page" id="page-example">
+        <div class="card">
+            <div class="title">✍️ ۷ مثال تشریحی حل‌شده</div>
+            
+            <div class="btn-row" style="margin-bottom: 12px; gap:4px;">
+                <button class="btn btn-ghost active" id="btn-ex-0" onclick="selectExample(0)">مثال ۱ (a=1)</button>
+                <button class="btn btn-ghost" id="btn-ex-1" onclick="selectExample(1)">مثال ۲ (a=1)</button>
+                <button class="btn btn-ghost" id="btn-ex-2" onclick="selectExample(2)">مثال ۳ (a=1)</button>
+                <button class="btn btn-ghost" id="btn-ex-3" onclick="selectExample(3)">مثال ۴ (a=2)</button>
+                <button class="btn btn-ghost" id="btn-ex-4" onclick="selectExample(4)">مثال ۵ (a=2)</button>
+                <button class="btn btn-ghost" id="btn-ex-5" onclick="selectExample(5)">مثال ۶ (a=3)</button>
+                <button class="btn btn-ghost" id="btn-ex-6" onclick="selectExample(6)">مثال ۷ (a=2)</button>
+            </div>
+
+            <div class="formula-box" id="ex-equation"></div>
+            <div id="ex-steps"></div>
+            
+            <div class="btn-row">
+                <button class="btn btn-pink" id="ex-next-btn" onclick="exampleNextStep()">مرحله‌ی بعد ▶</button>
+                <button class="btn btn-ghost" id="ex-restart-btn" onclick="exampleRestart()" style="display:none;">🔄 مرور دوباره</button>
+            </div>
+            <div class="btn-row" style="margin-top: 14px;"><button class="btn btn-main" onclick="switchTab('practice')">بریم تمرین ۱ رو حل کنیم ←</button></div>
+        </div>
+    </div>
+
+    <!-- ==================== بخش ۳: تمرین ۱ (۷ تمرین هدایت‌شده) ==================== -->
+    <div class="page" id="page-practice">
+        <div class="card">
+            <div class="title">🎯 تمرین ۱: حل گام‌به‌گام با راهنما</div>
+            <div class="center-pill">
+                <div class="progress-pill" id="prac-progress">مسئله‌ی ۱ از ۷</div>
+            </div>
+            <div class="formula-box" id="prac-equation"></div>
+            <div id="prac-steps"></div>
+            
+            <div id="prac-new-btn-container" style="display:none; text-align:center; margin-top:14px;">
+                <div class="btn-row">
+                    <button class="btn btn-main" onclick="nextPracticeProblem()" style="padding: 10px 18px;">🔄 مسئله بعدی تمرین ۱</button>
+                    <button class="btn btn-pink" onclick="switchTab('drag')" style="padding: 10px 18px;">بریم به تمرین ۲ (مستقل) ←</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== بخش ۴: تمرین ۲ (۷ تمرین مستقل با جشن و گلباران پایان) ==================== -->
+    <div class="page" id="page-drag">
+        <div class="card">
+            <div class="title">🧩 تمرین ۲: حل مستقل و پیشگیری از خطاهای رایج</div>
+            <div class="center-pill">
+                <div class="progress-pill" id="gm-pill">مسئله‌ی ۱ از ۷</div>
+            </div>
+            
+            <div class="derivation-container" id="gm-history-box"></div>
+
+            <div id="gm-finish-container" style="display:none; text-align:center; margin-top:16px;">
+                <!-- دکمه رفتن به مسئله بعدی -->
+                <button class="btn btn-main" id="gm-next-problem-btn" onclick="nextGmPractice()">🔄 مسئله‌ی بعدی تمرین ۲</button>
+                
+                <!-- کارت جشن ویژه پس از پایان تمام ۷ مسئله -->
+                <div id="gm-celebration-container" style="display:none;">
+                    <div class="celebration-box">
+                        <div class="celebration-flower-icon">🌸🏆🌺</div>
+                        <h3 style="color:var(--accent-color); font-size:1.35rem; margin-bottom:10px;">
+                            آفرین و هزاران تبریک به <span id="celeb-student-name" style="color:var(--pink-color);"></span> عزیز!
+                        </h3>
+                        <p style="color:var(--text2-color); font-size:0.96rem; line-height:2; margin-bottom:16px;">
+                            تو با تلاش و هوش عالی خودت، توانستی تمام <b>۷ مسئله‌ی تمرین ۲</b> را به روش مربع کامل بدون اشتباه حل کنی و از تمام دام‌های جبری عبور کنی! 👏✨<br>
+                            تسلط تو اکنون کامل است. حالا وقتشه بری سراغ آزمون و نمره ۲۰ رو ثبت کنی!
+                        </p>
+                        <div class="btn-row">
+                            <button class="btn btn-exam" style="padding: 11px 22px; font-size:0.98rem;" onclick="switchTab('exam')">
+                                ورود به آزمون سنجش مهارت (نمره ۲۰) 📝
+                            </button>
+                            <button class="btn btn-ghost" style="padding: 10px 16px;" onclick="loadGmPractice(0)">
+                                🔄 مرور مجدد تمرین ۲
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== بخش ۵: آزمون نهایی ==================== -->
+    <div class="page" id="page-exam">
+        <div class="card">
+            <div class="title">📝 آزمون سنجش مهارت مربع کامل</div>
+            <p style="text-align:center; font-size:0.9rem; color:var(--text3-color); margin-bottom:12px;">
+                در این آزمون ۵ معادله حل می‌کنی و در پایان کارنامه اختصاصی دریافت خواهی کرد.
+            </p>
+            
+            <div id="exam-play-area">
+                <div class="center-pill">
+                    <div class="progress-pill exam" id="exam-q-pill">سوال ۱ از ۵</div>
+                </div>
+
+                <div class="formula-box" id="exam-equation"></div>
+
+                <div class="step-box" style="margin-top:12px;">
+                    <div class="step-label">۱) پرانتز مربع کامل را بنویس:</div>
+                    <div class="step-eq">
+                        <span>(x + </span>
+                        <input type="text" id="exam-in-d" style="width:50px; margin:0 3px;" placeholder="عدد" />
+                        <span>)² = </span>
+                        <input type="text" id="exam-in-k" style="width:50px; margin:0 3px;" placeholder="عدد" />
+                    </div>
+
+                    <div class="step-label" style="margin-top:12px;">۲) ریشه‌های نهایی را ثبت کن:</div>
+                    <div class="input-row">
+                        <span>x₁ = </span><input type="text" id="exam-in-x1" style="width:65px;" />
+                        <span style="margin-right:8px;">x₂ = </span><input type="text" id="exam-in-x2" style="width:65px;" />
+                    </div>
+
+                    <button class="btn btn-exam" style="display:block;margin:14px auto 4px;" onclick="submitExamQuestion()">ثبت پاسخ و سوال بعدی ⏩</button>
+                    <div id="exam-feedback" class="feedback"></div>
+                </div>
+            </div>
+
+            <!-- کارنامه نهایی آزمون -->
+            <div id="exam-report-area" style="display:none;">
+                <div class="report-card">
+                    <div class="score-circle" id="exam-final-score">۲۰</div>
+                    <h3 id="exam-eval-msg" style="color:var(--text-color); margin-bottom:8px;">فوق‌العاده بود!</h3>
+                    <p id="exam-detail-msg" style="color:var(--text3-color); font-size:0.95rem; line-height:1.8; margin-bottom:14px;"></p>
+                    <button class="btn btn-exam" onclick="startExam()">🔄 آزمون مجدد</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== بخش ۶: ماشین حل‌کننده ==================== -->
+    <div class="page" id="page-tool">
+        <div class="card">
+            <div class="title">🧮 حل‌کننده‌ی هر معادله دلخواه</div>
+            <p style="text-align:center; font-size:0.9rem; color:var(--text3-color); margin-bottom:12px;">ضرایب a و b و c را وارد کن تا تمام مراحل مربع کامل برایت حل شود:</p>
+            
+            <div class="input-row" style="direction: ltr !important; flex-wrap: nowrap; background: rgba(255,255,255,0.7); padding:10px; border-radius:12px;">
+                <label style="margin-left:8px;">a =</label><input type="text" id="tool-a-input" value="2" />
+                <label style="margin-left:12px;">b =</label><input type="text" id="tool-b-input" value="-12" />
+                <label style="margin-left:12px;">c =</label><input type="text" id="tool-c-input" value="10" />
+            </div>
+            
+            <div class="btn-row"><button class="btn btn-main" onclick="toolSolve()">مرحله به مرحله حل کن</button></div>
+            <div id="tool-equation" class="formula-box" style="margin-top:14px; display:none;"></div>
+            <div id="tool-result"></div>
+        </div>
+    </div>
+
+    <!-- پاورقی با نام طراح -->
+    <footer class="app-footer">
+        طراحی و تدوین محتوای آموزشی: <b>زینب صفری</b> ✨
+    </footer>
+
+</div>
+
+<script>
+/* ==================================================================
+   مدیریت نام دانش‌آموز و ریزش گل
+================================================================== */
+let currentStudentName = "دانش‌آموز کوشا";
+
+function confirmStudentName() {
+    const input = document.getElementById('student-name-input');
+    const val = input.value.trim();
+    if (val) {
+        currentStudentName = val;
+    }
+    document.getElementById('badge-name').textContent = currentStudentName;
+    document.getElementById('student-badge').style.display = 'inline-flex';
+    document.getElementById('name-modal').style.display = 'none';
+}
+
+document.getElementById('student-name-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') confirmStudentName();
+});
+
+// تابع افکت ریزش گل (Flower Shower)
+function triggerFlowerShower(duration = 7500) {
+    const flowers = ['🌸', '🌺', '🌷', '🌼', '🌹', '💐', '✨'];
+    const endTime = Date.now() + duration;
+
+    const interval = setInterval(() => {
+        if (Date.now() > endTime) {
+            clearInterval(interval);
+            return;
+        }
+        for (let i = 0; i < 3; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'flower-petal';
+            petal.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            petal.style.left = (Math.random() * 95) + 'vw';
+            petal.style.fontSize = (18 + Math.random() * 26) + 'px';
+            const fallTime = 2.5 + Math.random() * 2.5;
+            petal.style.animationDuration = fallTime + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => {
+                if (petal && petal.parentNode) petal.parentNode.removeChild(petal);
+            }, fallTime * 1000);
+        }
+    }, 130);
+}
+
+/* ==================================================================
+   ابزارهای مشترک ریاضی
+================================================================== */
+function getFrac(num, den) {
+    return `<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+}
+function bdi(html) { return `<bdi dir="ltr">${html}</bdi>`; }
+
+function parseNum(str) {
+    if(!str) return NaN;
+    let s = str.toString().trim();
+    s = s.replace(/\s+/g, ''); 
+    s = s.replace(/[−–—_]/g, '-');
+    s = s.replace(/[٫،]/g, '.');
+    const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+    const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
+    s = s.replace(/[۰-۹]/g, d => persianDigits.indexOf(d));
+    s = s.replace(/[٠-٩]/g, d => arabicDigits.indexOf(d));
+    return parseFloat(s);
+}
+
+function fmtSigned(val) {
+    const sign = val < 0 ? '− ' : '';
+    return bdi(sign + Math.abs(val));
+}
+function fmtTerm(val) {
+    if (val === 0) return '';
+    const opSign = val < 0 ? '−' : '+';
+    return bdi(`<span class="op">${opSign}</span> ${Math.abs(val)}`);
+}
+function eqLine(a, b, c) {
+    const aTerm = (Math.abs(a) === 1 ? (a < 0 ? '−' : '') : fmtSigned(a)) + 'x<sup>2</sup>';
+    const bTerm = b === 0 ? '' : (Math.abs(b) === 1 ? bdi(`<span class="op">${b<0?'−':'+'}</span> x`) : fmtTerm(b) + 'x');
+    const cTerm = c === 0 ? '' : fmtTerm(c);
+    return `${aTerm} ${bTerm} ${cTerm} = 0`;
+}
+
+function showFb(elementId, type, html) {
+    const fb = document.getElementById(elementId);
+    if (!fb) return;
+    fb.className = 'feedback'; 
+    void fb.offsetWidth; 
+    fb.className = 'feedback show ' + type;
+    fb.innerHTML = html;
+}
+
+function toggleHint(hintId) {
+    const el = document.getElementById(hintId);
+    if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+function switchTab(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const navBtn = document.getElementById('btn-nav-' + name);
+    if(navBtn) navBtn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if(name === 'exam') startExam();
+}
+
+function setupDirectDrag(nodeEl, targetZone, onDropSuccess) {
+    let ghost = null;
+    let isDragging = false;
+
+    function onPointerDown(e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        isDragging = true;
+        const rect = nodeEl.getBoundingClientRect();
+        
+        ghost = nodeEl.cloneNode(true);
+        ghost.style.position = 'fixed';
+        ghost.style.left = rect.left + 'px';
+        ghost.style.top = rect.top + 'px';
+        ghost.style.width = rect.width + 'px';
+        ghost.style.height = rect.height + 'px';
+        ghost.style.zIndex = '99999';
+        ghost.style.pointerEvents = 'none';
+        ghost.style.opacity = '0.85';
+        ghost.style.transform = 'scale(1.18)';
+        document.body.appendChild(ghost);
+
+        nodeEl.style.opacity = '0.2';
+
+        function onPointerMove(ev) {
+            if (!isDragging || !ghost) return;
+            ev.preventDefault();
+            ghost.style.left = (ev.clientX - rect.width / 2) + 'px';
+            ghost.style.top = (ev.clientY - rect.height / 2) + 'px';
+
+            const tRect = targetZone.getBoundingClientRect();
+            if (ev.clientX >= tRect.left && ev.clientX <= tRect.right &&
+                ev.clientY >= tRect.top && ev.clientY <= tRect.bottom) {
+                targetZone.classList.add('active');
+            } else {
+                targetZone.classList.remove('active');
+            }
+        }
+
+        function onPointerUp(ev) {
+            isDragging = false;
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+
+            if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+            nodeEl.style.opacity = '1';
+            targetZone.classList.remove('active');
+
+            const tRect = targetZone.getBoundingClientRect();
+            if (ev.clientX >= tRect.left && ev.clientX <= tRect.right &&
+                ev.clientY >= tRect.top && ev.clientY <= tRect.bottom) {
+                onDropSuccess();
+            }
+        }
+
+        window.addEventListener('pointermove', onPointerMove, { passive: false });
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+    }
+
+    nodeEl.addEventListener('pointerdown', onPointerDown);
+
+    nodeEl.onclick = () => {
+        targetZone.classList.add('active');
+        setTimeout(() => {
+            targetZone.classList.remove('active');
+            onDropSuccess();
+        }, 250);
+    };
+}
+
+/* ==================================================================
+   بخش ۲: ۷ مثال تشریحی
+================================================================== */
+const allExamples = [
+    {
+        eq: "x<sup>2</sup> − 8x + 15 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) چون ضریب <bdi dir="ltr">x<sup>2</sup></bdi> عدد ۱ است، نیازی به تقسیم نداریم. عدد ثابت (+15) رو می‌بریم سمت راست:</div><div class="step-eq">${bdi(`x² − 8x = −15`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) ضریب x (یعنی 8-) رو نصف کرده و به توان ۲ می‌رسونیم:<br>${bdi(`b = −8 &nbsp;،&nbsp; b/2 = −4 &nbsp;،&nbsp; (−4)² = 16`)}</div><div class="step-eq">${bdi(`x² − 8x + 16 = −15 + 16 = 1`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) سمت چپ رو به صورت اتحاد مربع می‌نویسیم:</div><div class="step-eq">${bdi(`(x − 4)² = 1`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) از دو طرف جذر می‌گیریم (سمت راست ± می‌گیرد):</div><div class="step-eq">${bdi(`x − 4 = ±√1 = ±1`)}</div><div class="result-final">x₁ = 5 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = 3</div></div>`
+        ]
+    },
+    {
+        eq: "x<sup>2</sup> + 6x − 7 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) انتقال عدد ثابت به سمت راست:</div><div class="step-eq">${bdi(`x² + 6x = 7`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) اضافه کردن مربع نصف ضریب x به دو طرف (+9):</div><div class="step-eq">${bdi(`x² + 6x + 9 = 7 + 9 = 16`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) تشکیل اتحاد مربع کامل:</div><div class="step-eq">${bdi(`(x + 3)² = 16`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) جذر گرفتن از دو طرف:</div><div class="step-eq">${bdi(`x + 3 = ±4`)}</div><div class="result-final">x₁ = 1 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = −7</div></div>`
+        ]
+    },
+    {
+        eq: "x<sup>2</sup> − 10x + 21 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) عدد ۲۱ را به سمت راست منتقل می‌کنیم:</div><div class="step-eq">${bdi(`x² − 10x = −21`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) اضافه کردن توان دو نصف ضریب x یعنی ۲۵ به طرفین:</div><div class="step-eq">${bdi(`x² − 10x + 25 = −21 + 25 = 4`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) اتحاد مربع کامل:</div><div class="step-eq">${bdi(`(x − 5)² = 4`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) جذر گرفتن:</div><div class="step-eq">${bdi(`x − 5 = ±2`)}</div><div class="result-final">x₁ = 7 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = 3</div></div>`
+        ]
+    },
+    {
+        eq: "2x<sup>2</sup> + 8x − 10 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) اول کل معادله رو بر ضریب x² (یعنی 2) تقسیم می‌کنیم:</div><div class="step-eq">${bdi(`x² + 4x − 5 = 0`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) عدد ثابت (-5) رو می‌بریم سمت راست:</div><div class="step-eq">${bdi(`x² + 4x = 5`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) ضریب x را نصف کرده و به توان ۲ می‌رسانیم (+4):</div><div class="step-eq">${bdi(`x² + 4x + 4 = 5 + 4 = 9`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) سمت چپ اتحاد مربع شده و جذر می‌گیریم:</div><div class="step-eq">${bdi(`(x + 2)² = 9 &nbsp;→&nbsp; x + 2 = ±3`)}</div><div class="result-final">x₁ = 1 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = −5</div></div>`
+        ]
+    },
+    {
+        eq: "2x<sup>2</sup> − 12x + 10 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) تقسیم کل معادله بر ۲:</div><div class="step-eq">${bdi(`x² − 6x + 5 = 0`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) انتقال ۵ به سمت راست:</div><div class="step-eq">${bdi(`x² − 6x = −5`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) اضافه کردن ۹ به دو طرف رابطه:</div><div class="step-eq">${bdi(`x² − 6x + 9 = −5 + 9 = 4`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) اتحاد مربع و جذر گرفتن:</div><div class="step-eq">${bdi(`(x − 3)² = 4 &nbsp;→&nbsp; x − 3 = ±2`)}</div><div class="result-final">x₁ = 5 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = 1</div></div>`
+        ]
+    },
+    {
+        eq: "3x<sup>2</sup> + 12x − 15 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) تقسیم کل معادله بر ۳:</div><div class="step-eq">${bdi(`x² + 4x − 5 = 0`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) انتقال ۵- به سمت راست:</div><div class="step-eq">${bdi(`x² + 4x = 5`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) اضافه کردن ۴ به طرفین:</div><div class="step-eq">${bdi(`x² + 4x + 4 = 9`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) جذر گرفتن و ریشه‌ها:</div><div class="step-eq">${bdi(`(x + 2)² = 9 &nbsp;→&nbsp; x + 2 = ±3`)}</div><div class="result-final">x₁ = 1 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = −5</div></div>`
+        ]
+    },
+    {
+        eq: "2x<sup>2</sup> − 4x − 16 = 0",
+        steps: [
+            () => `<div class="step-box"><div class="step-label">۱) تقسیم کل معادله بر ۲:</div><div class="step-eq">${bdi(`x² − 2x − 8 = 0`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۲) انتقال ۸- به سمت راست:</div><div class="step-eq">${bdi(`x² − 2x = 8`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۳) اضافه کردن ۱ به دو طرف:</div><div class="step-eq">${bdi(`x² − 2x + 1 = 9`)}</div></div>`,
+            () => `<div class="step-box"><div class="step-label">۴) ساخت پرانتز و جذر:</div><div class="step-eq">${bdi(`(x − 1)² = 9 &nbsp;→&nbsp; x − 1 = ±3`)}</div><div class="result-final">x₁ = 4 &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = −2</div></div>`
+        ]
+    }
+];
+
+let curExIdx = 0;
+let exStepIdx = 0;
+let curExStepsList = [];
+
+function selectExample(idx) {
+    curExIdx = idx;
+    for(let i=0; i<7; i++) {
+        const btn = document.getElementById('btn-ex-' + i);
+        if(btn) btn.classList.remove('active');
+    }
+    const activeBtn = document.getElementById('btn-ex-' + idx);
+    if(activeBtn) activeBtn.classList.add('active');
+
+    document.getElementById('ex-equation').innerHTML = allExamples[idx].eq;
+    curExStepsList = allExamples[idx].steps;
+    exampleRestart();
+}
+
+function exampleRestart() {
+    exStepIdx = 0;
+    document.getElementById('ex-steps').innerHTML = '';
+    document.getElementById('ex-next-btn').style.display = 'inline-block';
+    document.getElementById('ex-restart-btn').style.display = 'none';
+}
+
+function exampleNextStep() {
+    if (exStepIdx >= curExStepsList.length) return;
+    document.getElementById('ex-steps').innerHTML += curExStepsList[exStepIdx]();
+    exStepIdx++;
+    if (exStepIdx >= curExStepsList.length) {
+        document.getElementById('ex-next-btn').style.display = 'none';
+        document.getElementById('ex-restart-btn').style.display = 'inline-block';
+    }
+}
+selectExample(0);
+
+/* ==================================================================
+   بخش ۳: تمرین ۱ (۷ مسئله)
+================================================================== */
+const practiceBank1 = [
+    { a: 2, origB: 8, origC: -10, tb: 4, tc: -5, halfB: 2, square: 4, k: 9 },
+    { a: 2, origB: -12, origC: 10, tb: -6, tc: 5, halfB: -3, square: 9, k: 4 },
+    { a: 3, origB: 12, origC: -15, tb: 4, tc: -5, halfB: 2, square: 4, k: 9 },
+    { a: 2, origB: -4, origC: -16, tb: -2, tc: -8, halfB: -1, square: 1, k: 9 },
+    { a: 2, origB: 12, origC: -14, tb: 6, tc: -7, halfB: 3, square: 9, k: 16 },
+    { a: 3, origB: -18, origC: 24, tb: -6, tc: 8, halfB: -3, square: 9, k: 1 },
+    { a: 2, origB: -8, origC: -24, tb: -4, tc: -12, halfB: -2, square: 4, k: 16 }
+];
+let curPracIdx = 0;
+let prac = practiceBank1[0];
+
+function loadPractice1(index) {
+    curPracIdx = index % practiceBank1.length;
+    prac = practiceBank1[curPracIdx];
+    document.getElementById('prac-new-btn-container').style.display = 'none';
+    document.getElementById('prac-equation').innerHTML = eqLine(prac.a, prac.origB, prac.origC);
+    document.getElementById('prac-progress').textContent = `مسئله‌ی ${curPracIdx + 1} از ۷`;
+    document.getElementById('prac-steps').innerHTML = '';
+    renderStep1();
+}
+
+function nextPracticeProblem() {
+    loadPractice1(curPracIdx + 1);
+}
+
+function renderStep1() {
+    const c = document.getElementById('prac-steps');
+    c.innerHTML += `<div class="step-box" id="p-step1">
+        <div class="step-label">۱) اول کل معادله رو بر ضریب <bdi dir="ltr">x<sup>2</sup></bdi> (یعنی ${prac.a}) تقسیم کن:</div>
+        <div class="input-row">
+            <span>x² + (</span><input type="text" id="prac-tb-input" placeholder="b" />
+            <span>)x + (</span><input type="text" id="prac-tc-input" placeholder="c" />
+            <span>) = 0</span>
+        </div>
+        <button class="btn btn-main" style="display:block;margin:6px auto;" onclick="checkStep1()">تأیید</button>
+        <div id="fb-step1" class="feedback"></div>
+    </div>`;
+}
+
+function checkStep1() {
+    const vb = parseNum(document.getElementById('prac-tb-input').value);
+    const vc = parseNum(document.getElementById('prac-tc-input').value);
+    if (isNaN(vb) || isNaN(vc)) { 
+        showFb('fb-step1', 'err', '⚠️ هر دو جای خالی رو پر کن!'); 
+        return; 
+    }
+    if (vb === prac.tb && vc === prac.tc) {
+        showFb('fb-step1', 'ok', `✅ عالی! معادله جدید: 
+            <div class="highlight-eq">${bdi(eqLine(1, prac.tb, prac.tc))}</div>`);
+        document.getElementById('prac-tb-input').disabled = true;
+        document.getElementById('prac-tc-input').disabled = true;
+        setTimeout(renderStep2, 1000);
+    } else {
+        showFb('fb-step1', 'err', `❌ اشتباه است. باید ${prac.origB} و ${prac.origC} را بر ${prac.a} تقسیم کنی.`);
+    }
+}
+
+function renderStep2() {
+    const c = document.getElementById('prac-steps');
+    const bTerm = prac.tb > 0 ? `+ ${prac.tb}x` : `− ${Math.abs(prac.tb)}x`;
+    let html = `<div class="step-box" id="p-step2">
+        <div class="step-label">۲) حالا عدد ثابت رو ببر سمت راست معادله:</div>
+        <div class="input-row">
+            <span>x² ${bTerm} = </span>
+            <input type="text" id="prac-c-input" placeholder="عدد" />
+            <button class="btn btn-main" onclick="checkStep2()">تأیید</button>
+        </div>
+        <div id="fb-step2" class="feedback"></div>
+    </div>`;
+    c.innerHTML += html;
+    document.getElementById('p-step2').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function checkStep2() {
+    const val = parseNum(document.getElementById('prac-c-input').value);
+    if (isNaN(val)) { showFb('fb-step2', 'err', '⚠️ یه عدد وارد کن!'); return; }
+    if (val === -prac.tc) {
+        const bTerm = prac.tb > 0 ? `+ ${prac.tb}x` : `− ${Math.abs(prac.tb)}x`;
+        showFb('fb-step2', 'ok', `✅ آفرین!
+            <div class="highlight-eq">${bdi(`x² ${bTerm} = ${-prac.tc}`)}</div>`);
+        document.getElementById('prac-c-input').disabled = true;
+        setTimeout(renderStep3, 1000);
+    } else {
+        showFb('fb-step2', 'err', `❌ قرینه‌ی عدد ${bdi(prac.tc)} را بنویس.`);
+    }
+}
+
+function renderStep3() {
+    const c = document.getElementById('prac-steps');
+    c.innerHTML += `<div class="step-box" id="p-step3">
+        <div class="step-label">۳) مقدار b، نصف آن و توان دوی آن را بنویس:</div>
+        <div class="three-inputs-grid">
+            <div class="input-col-card"><label>b =</label><input type="text" id="p-b" /></div>
+            <div class="input-col-card"><label>${getFrac('b','2')} =</label><input type="text" id="p-half" /></div>
+            <div class="input-col-card"><label>(${getFrac('b','2')})² =</label><input type="text" id="p-sq" /></div>
+        </div>
+        <button class="btn btn-main" style="display:block;margin:8px auto;" onclick="checkStep3()">تأیید</button>
+        <div id="fb-step3" class="feedback"></div>
+    </div>`;
+    document.getElementById('p-step3').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function checkStep3() {
+    const vb = parseNum(document.getElementById('p-b').value);
+    const vhalf = parseNum(document.getElementById('p-half').value);
+    const vsq = parseNum(document.getElementById('p-sq').value);
+    if (isNaN(vb) || isNaN(vhalf) || isNaN(vsq)) { showFb('fb-step3', 'err', '⚠️ هر ۳ کادر رو پر کن!'); return; }
+    if (Math.abs(vb - prac.tb) < 0.01 && Math.abs(vhalf - prac.halfB) < 0.01 && Math.abs(vsq - prac.square) < 0.01) {
+        showFb('fb-step3', 'ok', `✅ بسیار عالی!`);
+        document.getElementById('p-b').disabled = true;
+        document.getElementById('p-half').disabled = true;
+        document.getElementById('p-sq').disabled = true;
+        setTimeout(renderStep4, 1000);
+    } else {
+        showFb('fb-step3', 'err', `❌ مقادیر اشتباه است. دقت کن ضریب x الان ${prac.tb} است.`);
+    }
+}
+
+function renderStep4() {
+    const c = document.getElementById('prac-steps');
+    const rightSideBefore = -prac.tc;
+    const bterm = prac.tb > 0 ? `+ ${prac.tb}x` : `− ${Math.abs(prac.tb)}x`;
+    const leftSqHTML = prac.halfB < 0 ? `(${prac.halfB})²` : `${prac.halfB}²`;
+
+    c.innerHTML += `<div class="step-box" id="p-step4">
+        <div class="step-label">۴) سمت چپ رو به صورت اتحاد مربع بنویس و سمت راست رو جمع کن:</div>
+        <div class="step-eq" style="background:#fff; border:1px dashed var(--border-color); flex-direction:column; line-height: 1.8;">
+            <div>${bdi(`x² ${bterm} + ${leftSqHTML} = ${rightSideBefore} + ${prac.square}`)}</div>
+            <div>${bdi(`(x + ${prac.halfB})² = ${prac.k}`)}</div>
+        </div>
+        <div class="input-row" style="margin-top:6px;">
+            <span>(x + </span>
+            <input type="text" id="prac-d-input" placeholder="عدد" />
+            <span>)² = </span>
+            <input type="text" id="prac-k-input" placeholder="عدد" />
+            <button class="btn btn-main" onclick="checkStep4()">تأیید</button>
+        </div>
+        <div id="fb-step4" class="feedback"></div>
+    </div>`;
+    document.getElementById('p-step4').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function checkStep4() {
+    const d = parseNum(document.getElementById('prac-d-input').value);
+    const k = parseNum(document.getElementById('prac-k-input').value);
+    if (isNaN(d) || isNaN(k)) { showFb('fb-step4', 'err', '⚠️ هر دو جای خالی رو پر کن!'); return; }
+    if (Math.abs(d - prac.halfB) < 0.01 && Math.abs(k - prac.k) < 0.01) {
+        showFb('fb-step4', 'ok', `✅ درسته!`);
+        document.getElementById('prac-d-input').disabled = true;
+        document.getElementById('prac-k-input').disabled = true;
+        setTimeout(renderStep5, 1000);
+    } else {
+        showFb('fb-step4', 'err', `❌ دقت کن. داخل پرانتز باید ${prac.halfB} باشد.`);
+    }
+}
+
+function renderStep5() {
+    const c = document.getElementById('prac-steps');
+    const rootK = Math.sqrt(prac.k);
+    const sign = prac.halfB >= 0 ? '+' : '−';
+    
+    c.innerHTML += `<div class="step-box" id="p-step5">
+        <div class="step-label">۵) جذر بگیر و ریشه‌ها را بنویس:<br>
+        <div style="text-align:center; direction:ltr; margin-top:4px; font-family:'Cambria Math'; font-size:1.1rem;">${bdi(`x ${sign} ${Math.abs(prac.halfB)} = ±${rootK}`)}</div></div>
+        <div class="input-row" style="margin-top:6px;">
+            <span>x₁ = </span><input type="text" id="prac-x1" style="width:65px;" />
+            <span>x₂ = </span><input type="text" id="prac-x2" style="width:65px;" />
+            <button class="btn btn-main" onclick="checkStep5()">بررسی</button>
+        </div>
+        <div id="fb-step5" class="feedback"></div>
+    </div>`;
+    document.getElementById('p-step5').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function checkStep5() {
+    const v1 = parseNum(document.getElementById('prac-x1').value);
+    const v2 = parseNum(document.getElementById('prac-x2').value);
+    if (isNaN(v1) || isNaN(v2)) { showFb('fb-step5', 'err', '⚠️ هر دو ریشه رو وارد کن!'); return; }
+    
+    const rootK = Math.sqrt(prac.k);
+    const x1 = -prac.halfB + rootK;
+    const x2 = -prac.halfB - rootK;
+    const got = [v1, v2].sort((a,b)=>a-b);
+    const expected = [x1, x2].sort((a,b)=>a-b);
+
+    if (Math.abs(got[0]-expected[0]) < 0.01 && Math.abs(got[1]-expected[1]) < 0.01) {
+        showFb('fb-step5', 'ok', `🎉 عالی! هر دو ریشه درسته:
+        <div class="highlight-eq" style="background:rgba(46,204,113,0.2); border-color:var(--green-color);">
+            ${bdi(`x₁ = ${x1} &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = ${x2}`)}
+        </div>`);
+        document.getElementById('prac-x1').disabled = true;
+        document.getElementById('prac-x2').disabled = true;
+        document.getElementById('prac-new-btn-container').style.display = 'block';
+    } else {
+        showFb('fb-step5', 'err', `❌ دوباره حساب کن.`);
+    }
+}
+loadPractice1(0);
+
+/* ==================================================================
+   بخش ۴: تمرین ۲ (۷ مسئله مستقل + پیام تشویق و ریزش گل)
+================================================================== */
+const gmProblems = [
+    { a: 2, b: 8, c: -10, b2: 4, c2: -5, halfB: 2, sq: 4, k: 9, r1: 1, r2: -5 },
+    { a: 2, b: -12, c: 10, b2: -6, c2: 5, halfB: -3, sq: 9, k: 4, r1: 5, r2: 1 },
+    { a: 3, b: 12, c: -15, b2: 4, c2: -5, halfB: 2, sq: 4, k: 9, r1: 1, r2: -5 },
+    { a: 2, b: -4, c: -16, b2: -2, c2: -8, halfB: -1, sq: 1, k: 9, r1: 4, r2: -2 },
+    { a: 2, b: 12, c: -14, b2: 6, c2: -7, halfB: 3, sq: 9, k: 16, r1: 1, r2: -7 },
+    { a: 3, b: -18, c: 24, b2: -6, c2: 8, halfB: -3, sq: 9, k: 1, r1: 4, r2: 2 },
+    { a: 2, b: -8, c: -24, b2: -4, c2: -12, halfB: -2, sq: 4, k: 16, r1: 6, r2: -2 }
+];
+let curGmIdx = 0;
+let gmProb = gmProblems[0];
+
+function loadGmPractice(idx) {
+    curGmIdx = idx % gmProblems.length;
+    gmProb = gmProblems[curGmIdx];
+    
+    document.getElementById('gm-pill').textContent = `مسئله‌ی ${curGmIdx + 1} از ۷`;
+    document.getElementById('gm-history-box').innerHTML = '';
+    document.getElementById('gm-finish-container').style.display = 'none';
+    document.getElementById('gm-celebration-container').style.display = 'none';
+    document.getElementById('gm-next-problem-btn').style.display = 'inline-flex';
+    renderGmStep1();
+}
+
+function nextGmPractice() {
+    loadGmPractice(curGmIdx + 1);
+}
+
+/* گام ۱ */
+function renderGmStep1() {
+    const box = document.getElementById('gm-history-box');
+    const bSign = gmProb.b >= 0 ? `+ ${gmProb.b}` : `− ${Math.abs(gmProb.b)}`;
+    const cSign = gmProb.c >= 0 ? `+ ${gmProb.c}` : `− ${Math.abs(gmProb.c)}`;
+
+    box.innerHTML += `
+    <div class="tree-step" id="gm-step1-box">
+        <div class="tree-node-bullet">۱</div>
+        <div class="step-box">
+            <div class="step-label">گام ۱</div>
+            <div class="step-eq" id="gm-step1-eq-container" style="flex-direction:column;">
+                <div>
+                    <span class="gm-node" id="gm-drag-coeff">${gmProb.a}</span>x² ${bSign}x ${cSign} = 0
+                </div>
+                <div class="gm-drop-bar" id="gm-drop-denominator">
+                    👇 (ضریب را به اینجا بکشید)
+                </div>
+            </div>
+
+            <div id="gm-step1-calc-zone" style="display:none;">
+                <div class="step-eq">
+                    ${getFrac(`${gmProb.a}x²`, gmProb.a)} 
+                    ${gmProb.b >= 0 ? '+' : '−'} ${getFrac(`${Math.abs(gmProb.b)}x`, gmProb.a)} 
+                    ${gmProb.c >= 0 ? '+' : '−'} ${getFrac(`${Math.abs(gmProb.c)}`, gmProb.a)} 
+                    = ${getFrac('0', gmProb.a)}
+                </div>
+                <div class="input-row" style="margin-top:8px;">
+                    <span>x² + (</span>
+                    <input type="text" id="gm-in-b-div" placeholder="b" />
+                    <span>)x + (</span>
+                    <input type="text" id="gm-in-c-div" placeholder="c" />
+                    <span>) = 0</span>
+                    <button class="btn btn-main" style="padding:6px 12px; margin-right:4px;" onclick="checkGmStep1Calc()">تأیید</button>
+                </div>
+            </div>
+            
+            <button class="hint-toggle" onclick="toggleHint('hint-1')">💡 نیاز به سرنخ داری؟</button>
+            <div class="hint-content" id="hint-1">ضریب x² باید عدد ۱ شود؛ بنابراین تمام جملات رابطه بر ضریب تقسیم می‌شوند.</div>
+            <div id="gm-fb-1" class="feedback"></div>
+        </div>
+    </div>`;
+
+    const coeff = document.getElementById('gm-drag-coeff');
+    const dropZone = document.getElementById('gm-drop-denominator');
+
+    setupDirectDrag(coeff, dropZone, () => {
+        document.getElementById('gm-drop-denominator').style.display = 'none';
+        document.getElementById('gm-step1-calc-zone').style.display = 'block';
+        coeff.style.cursor = 'default';
+        coeff.onclick = null;
+    });
+}
+
+function checkGmStep1Calc() {
+    const vb = parseNum(document.getElementById('gm-in-b-div').value);
+    const vc = parseNum(document.getElementById('gm-in-c-div').value);
+
+    if (isNaN(vb) || isNaN(vc)) {
+        showFb('gm-fb-1', 'err', '⚠️ هر دو مقدار را وارد کن.');
+        return;
+    }
+
+    if (vb === gmProb.b2 && vc === gmProb.c2) {
+        showFb('gm-fb-1', 'ok', `✅ سطر جدید:
+            <div class="highlight-eq">${eqLine(1, gmProb.b2, gmProb.c2)}</div>`);
+        document.getElementById('gm-in-b-div').disabled = true;
+        document.getElementById('gm-in-c-div').disabled = true;
+        setTimeout(renderGmStep2, 1000);
+    } else {
+        showFb('gm-fb-1', 'err', `❌ حاصل تقسیم یکی از عبارات اشتباه است. مجدداً تقسیم کن.`);
+    }
+}
+
+/* گام ۲ */
+function renderGmStep2() {
+    const box = document.getElementById('gm-history-box');
+    const bSign = gmProb.b2 >= 0 ? `+ ${gmProb.b2}` : `− ${Math.abs(gmProb.b2)}`;
+    const cVal = gmProb.c2 >= 0 ? `+ ${gmProb.c2}` : `− ${Math.abs(gmProb.c2)}`;
+    const rightVal = -gmProb.c2;
+
+    box.innerHTML += `
+    <div class="tree-step" id="gm-step2-box">
+        <div class="tree-node-bullet">۲</div>
+        <div class="step-box">
+            <div class="step-label">گام ۲</div>
+            <div class="step-eq" id="gm-step2-interactive-line">
+                <span>x² ${bSign}x</span>
+                <span class="gm-node" id="gm-drag-c">${cVal}</span>
+                <span>= 0</span>
+                <span style="color:var(--text3-color); margin:0 6px;">→</span>
+                <span>x² ${bSign}x = </span>
+                <span class="gm-slot" id="gm-slot-c">🎯</span>
+            </div>
+            
+            <button class="hint-toggle" onclick="toggleHint('hint-2')">💡 نیاز به سرنخ داری؟</button>
+            <div class="hint-content" id="hint-2">جمله بدون متغیر (عدد ثابت) باید در سمت راست علامت مساوی مستقر شود.</div>
+            <div id="gm-fb-2" class="feedback"></div>
+        </div>
+    </div>`;
+
+    document.getElementById('gm-step2-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const cNode = document.getElementById('gm-drag-c');
+    const cSlot = document.getElementById('gm-slot-c');
+
+    setupDirectDrag(cNode, cSlot, () => {
+        document.getElementById('gm-step2-interactive-line').innerHTML = `
+            <span style="color:#0b662a;">x² ${bSign}x = ${rightVal}</span>
+        `;
+        showFb('gm-fb-2', 'ok', `✅ سطر جدید تأیید شد.`);
+        setTimeout(renderGmStep3, 1000);
+    });
+}
+
+/* گام ۳ */
+function renderGmStep3() {
+    const box = document.getElementById('gm-history-box');
+    box.innerHTML += `
+    <div class="tree-step" id="gm-step3-box">
+        <div class="tree-node-bullet">۳</div>
+        <div class="step-box">
+            <div class="step-label">گام ۳</div>
+            <div class="three-inputs-grid">
+                <div class="input-col-card">
+                    <label>b =</label>
+                    <input type="text" id="gm-b-val" />
+                </div>
+                <div class="input-col-card">
+                    <label>${getFrac('b','2')} =</label>
+                    <input type="text" id="gm-half-val" />
+                </div>
+                <div class="input-col-card">
+                    <label>(${getFrac('b','2')})² =</label>
+                    <input type="text" id="gm-sq-val" />
+                </div>
+            </div>
+
+            <button class="btn btn-main" style="display:block;margin:10px auto 4px;" onclick="checkGmStep3()">تأیید</button>
+            
+            <button class="hint-toggle" onclick="toggleHint('hint-3')">💡 نیاز به سرنخ داری؟</button>
+            <div class="hint-content" id="hint-3">ضریب فعلی x را نصف کرده و حاصلش را به توان ۲ برسان تا مقدار مربع پیدا شود.</div>
+            <div id="gm-fb-3" class="feedback"></div>
+        </div>
+    </div>`;
+
+    document.getElementById('gm-step3-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function checkGmStep3() {
+    const vb = parseNum(document.getElementById('gm-b-val').value);
+    const vhalf = parseNum(document.getElementById('gm-half-val').value);
+    const vsq = parseNum(document.getElementById('gm-sq-val').value);
+
+    if (isNaN(vb) || isNaN(vhalf) || isNaN(vsq)) {
+        showFb('gm-fb-3', 'err', '⚠️ هر ۳ کادر را پر کن.');
+        return;
+    }
+
+    if (vb === gmProb.b2 && vhalf === gmProb.halfB && vsq === gmProb.sq) {
+        showFb('gm-fb-3', 'ok', `✅ بسیار عالی! حالا این مقدار مربع را در مرحله بعد با دست خودت به دو طرف بیفزا.`);
+        document.getElementById('gm-b-val').disabled = true;
+        document.getElementById('gm-half-val').disabled = true;
+        document.getElementById('gm-sq-val').disabled = true;
+        setTimeout(renderGmStep4, 1000);
+    } else {
+        showFb('gm-fb-3', 'err', `❌ محاسبات b یا نصف آن یا توان دو همخوانی ندارد. مجدداً حساب کن.`);
+    }
+}
+
+/* گام ۴ */
+function renderGmStep4() {
+    const box = document.getElementById('gm-history-box');
+    const bSign = gmProb.b2 >= 0 ? `+ ${gmProb.b2}` : `− ${Math.abs(gmProb.b2)}`;
+    const rightVal = -gmProb.c2;
+
+    box.innerHTML += `
+    <div class="tree-step" id="gm-step4-box">
+        <div class="tree-node-bullet">۴</div>
+        <div class="step-box">
+            <div class="step-label">گام ۴</div>
+            <div class="step-eq">
+                <span>x² ${bSign}x + </span>
+                <input type="text" id="gm-add-left-in" style="width:48px; margin:0 3px;" placeholder="؟" />
+                <span>= ${rightVal} + </span>
+                <input type="text" id="gm-add-right-in" style="width:48px; margin:0 3px;" placeholder="؟" />
+            </div>
+            
+            <button class="btn btn-main" style="display:block;margin:8px auto 4px;" onclick="checkGmStep4()">تأیید</button>
+
+            <button class="hint-toggle" onclick="toggleHint('hint-4')">💡 نیاز به سرنخ داری؟</button>
+            <div class="hint-content" id="hint-4">برای ساختن مربع کامل و حفظ ترازوی معادله، باید مقدار مربع نصف ضریب یعنی (${gmProb.sq}) را به هر دو طرف معادله بیفزایی.</div>
+            <div id="gm-fb-4" class="feedback"></div>
+        </div>
+    </div>`;
+
+    document.getElementById('gm-step4-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function checkGmStep4() {
+    const valL = parseNum(document.getElementById('gm-add-left-in').value);
+    const valR = parseNum(document.getElementById('gm-add-right-in').value);
+
+    if (isNaN(valL) || isNaN(valR)) {
+        showFb('gm-fb-4', 'err', '⚠️ هر دو جای خالی را پر کن.');
+        return;
+    }
+
+    if (Math.abs(valL - gmProb.halfB) < 0.01 || Math.abs(valR - gmProb.halfB) < 0.01) {
+        showFb('gm-fb-4', 'warn', `⚠️ <b>خطای رایج!</b> عدد ${bdi(gmProb.halfB)} فقط نصف ضریب است؛ فراموش کردی آن را به توان ۲ برسانی! باید عددِ به توان ۲ رسیده یعنی <b>${bdi(gmProb.sq)}</b> را به هر دو طرف اضافه کنی.`);
+        return;
+    }
+
+    if (valL !== valR) {
+        showFb('gm-fb-4', 'warn', `⚠️ <b>ترازوی معادله به هم خورد!</b> برای حفظ برابری، باید دقیقاً عدد یکسانی به هر دو طرف اضافه شود.`);
+        return;
+    }
+
+    if (valL === gmProb.sq && valR === gmProb.sq) {
+        const bSign = gmProb.b2 >= 0 ? `+ ${gmProb.b2}` : `− ${Math.abs(gmProb.b2)}`;
+        showFb('gm-fb-4', 'ok', `✅ احسنت! ترازوی تساوی برقرار ماند:
+            <div class="highlight-eq">x² ${bSign}x + ${gmProb.sq} = ${gmProb.k}</div>`);
+        document.getElementById('gm-add-left-in').disabled = true;
+        document.getElementById('gm-add-right-in').disabled = true;
+        setTimeout(renderGmStep5, 1000);
+    } else {
+        showFb('gm-fb-4', 'err', `❌ این مقدار اشتباه است. عددی که در گام قبل به عنوان توان ۲ محاسبه کردی را اضافه کن.`);
+    }
+}
+
+/* گام ۵ */
+function renderGmStep5() {
+    const box = document.getElementById('gm-history-box');
+
+    box.innerHTML += `
+    <div class="tree-step" id="gm-step5-box">
+        <div class="tree-node-bullet">۵</div>
+        <div class="step-box">
+            <div class="step-label">گام ۵</div>
+            <div class="step-eq">
+                <span>(x + </span>
+                <input type="text" id="gm-bin-d" style="width:48px; margin:0 3px;" placeholder="؟" />
+                <span>)² = </span>
+                <input type="text" id="gm-bin-k" style="width:48px; margin:0 3px;" placeholder="؟" />
+            </div>
+            <button class="btn btn-main" style="display:block;margin:8px auto 4px;" onclick="checkGmStep5()">تأیید</button>
+            
+            <button class="hint-toggle" onclick="toggleHint('hint-5')">💡 نیاز به سرنخ داری؟</button>
+            <div class="hint-content" id="hint-5">داخل پرانتز نصف ضریب x قرار می‌گیرد و سمت راست حاصل جمع اعداد است.</div>
+            <div id="gm-fb-5" class="feedback"></div>
+        </div>
+    </div>`;
+
+    document.getElementById('gm-step5-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function checkGmStep5() {
+    const dVal = parseNum(document.getElementById('gm-bin-d').value);
+    const kVal = parseNum(document.getElementById('gm-bin-k').value);
+
+    if (isNaN(dVal) || isNaN(kVal)) {
+        showFb('gm-fb-5', 'err', '⚠️ جای خالی پرانتز و تساوی را پر کن.');
+        return;
+    }
+
+    if (Math.abs(dVal - gmProb.halfB) < 0.01 && Math.abs(kVal - gmProb.k) < 0.01) {
+        const sign = gmProb.halfB >= 0 ? '+' : '−';
+        showFb('gm-fb-5', 'ok', `✅ سطر اتحاد مربع کامل:
+            <div class="highlight-eq">(x ${sign} ${Math.abs(gmProb.halfB)})² = ${gmProb.k}</div>`);
+        document.getElementById('gm-bin-d').disabled = true;
+        document.getElementById('gm-bin-k').disabled = true;
+        setTimeout(renderGmStep6, 1000);
+    } else {
+        showFb('gm-fb-5', 'err', `❌ عبارت داخل پرانتز یا حاصل سمت راست با سطر بالا هم‌ارز نیست.`);
+    }
+}
+
+/* گام ۶ */
+function renderGmStep6() {
+    const box = document.getElementById('gm-history-box');
+    const halfSign = gmProb.halfB >= 0 ? '+' : '−';
+    const rootVal = Math.sqrt(gmProb.k);
+
+    box.innerHTML += `
+    <div class="tree-step" id="gm-step6-box">
+        <div class="tree-node-bullet">۶</div>
+        <div class="step-box">
+            <div class="step-label">گام ۶: ریشه‌گیری</div>
+            
+            <div class="step-eq" id="gm-root-transition-line">
+                <span>x ${halfSign} ${Math.abs(gmProb.halfB)} = ±√ </span>
+                <input type="text" id="gm-under-root" style="width:48px; margin:0 3px;" placeholder="عدد" />
+                <span> = ± </span>
+                <input type="text" id="gm-root-result" style="width:48px; margin:0 3px;" placeholder="جذر" />
+                <button class="btn btn-main" style="padding:5px 10px; margin-right:4px;" onclick="checkGmRootTransition()">تأیید جذر</button>
+            </div>
+
+            <div id="gm-branches-wrapper" style="display:none; margin-top:10px;">
+                <div class="branch-grid">
+                    <div class="branch-card">
+                        <span class="branch-badge branch-pos">شاخه مثبت (+)</span>
+                        <div style="font-family:'Cambria Math'; font-size:1.05rem; margin-bottom:6px;">
+                            x ${halfSign} ${Math.abs(gmProb.halfB)} = +${rootVal}
+                        </div>
+                        <div>
+                            <span>x₁ = </span><input type="text" id="gm-x1-res" style="width:58px;" />
+                        </div>
+                    </div>
+
+                    <div class="branch-card">
+                        <span class="branch-badge branch-neg">شاخه منفی (−)</span>
+                        <div style="font-family:'Cambria Math'; font-size:1.05rem; margin-bottom:6px;">
+                            x ${halfSign} ${Math.abs(gmProb.halfB)} = −${rootVal}
+                        </div>
+                        <div>
+                            <span>x₂ = </span><input type="text" id="gm-x2-res" style="width:58px;" />
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-main" style="display:block;margin:10px auto 4px;" onclick="checkGmFinalRoots()">ثبت نهایی ریشه‌ها</button>
+            </div>
+
+            <button class="hint-toggle" onclick="toggleHint('hint-6')">💡 نیاز به سرنخ داری؟</button>
+            <div class="hint-content" id="hint-6">چون پرانتز به توان ۲ است، برای خنثی کردن توان ۲ باید از سمت راست جذر گرفته شود و علامت ± حتماً گذاشته شود.</div>
+            <div id="gm-fb-6" class="feedback"></div>
+        </div>
+    </div>`;
+
+    document.getElementById('gm-step6-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function checkGmRootTransition() {
+    const underRoot = parseNum(document.getElementById('gm-under-root').value);
+    const rootRes = parseNum(document.getElementById('gm-root-result').value);
+    const expectedRoot = Math.sqrt(gmProb.k);
+
+    if (isNaN(underRoot) || isNaN(rootRes)) {
+        showFb('gm-fb-6', 'err', '⚠️ هر دو کادرِ عدد زیر رادیکال و حاصل جذر آن را پر کن.');
+        return;
+    }
+
+    if (underRoot !== gmProb.k) {
+        showFb('gm-fb-6', 'err', `❌ عدد زیر رادیکال باید همان عدد سمت راست معادله یعنی ${gmProb.k} باشد.`);
+        return;
+    }
+
+    if (rootRes === gmProb.k) {
+        showFb('gm-fb-6', 'warn', `⚠️ <b>خطای رایج!</b> یادت رفت جذر بگیری! توان دوی پرانتز حذف شده، پس باید حاصل جذر عدد ${gmProb.k} را بنویسی نه خود ${gmProb.k} را.`);
+        return;
+    }
+
+    if (Math.abs(rootRes - expectedRoot) < 0.01) {
+        showFb('gm-fb-6', 'ok', `✅ آفرین! جذر گرفته شد و علامت ± نشان می‌دهد معادله به دو شاخه تجزیه می‌شود:`);
+        document.getElementById('gm-under-root').disabled = true;
+        document.getElementById('gm-root-result').disabled = true;
+        document.getElementById('gm-branches-wrapper').style.display = 'block';
+        document.getElementById('gm-branches-wrapper').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+        showFb('gm-fb-6', 'err', `❌ حاصل جذر عدد ${gmProb.k} اشتباه محاسبه شده است.`);
+    }
+}
+
+function checkGmFinalRoots() {
+    const rx1 = parseNum(document.getElementById('gm-x1-res').value);
+    const rx2 = parseNum(document.getElementById('gm-x2-res').value);
+
+    if (isNaN(rx1) || isNaN(rx2)) {
+        showFb('gm-fb-6', 'err', '⚠️ هر دو ریشه را کامل کن.');
+        return;
+    }
+
+    const got = [rx1, rx2].sort((a,b)=>a-b);
+    const exp = [gmProb.r1, gmProb.r2].sort((a,b)=>a-b);
+
+    if (Math.abs(got[0] - exp[0]) < 0.01 && Math.abs(got[1] - exp[1]) < 0.01) {
+        showFb('gm-fb-6', 'ok', `🎉 تبریک! هر دو ریشه را بدون افتادن در دام خطاهای رایج حل کردی:
+            <div class="highlight-eq">x₁ = ${gmProb.r1} &nbsp;&nbsp;،&nbsp;&nbsp; x₂ = ${gmProb.r2}</div>`);
+        document.getElementById('gm-x1-res').disabled = true;
+        document.getElementById('gm-x2-res').disabled = true;
+        document.getElementById('gm-finish-container').style.display = 'block';
+
+        // بررسی اینکه آیا به انتهای ۷ مسئله تمرین ۲ رسیده‌ایم
+        if (curGmIdx === gmProblems.length - 1) {
+            document.getElementById('gm-next-problem-btn').style.display = 'none';
+            document.getElementById('celeb-student-name').textContent = currentStudentName;
+            document.getElementById('gm-celebration-container').style.display = 'block';
+            document.getElementById('gm-celebration-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // شلیک انیمیشن ریزش گل
+            triggerFlowerShower(8000);
+        } else {
+            document.getElementById('gm-next-problem-btn').style.display = 'inline-flex';
+            document.getElementById('gm-celebration-container').style.display = 'none';
+        }
+    } else {
+        showFb('gm-fb-6', 'err', `❌ یکی از ریشه‌ها اشتباه است. حل دو معادله خطی را مجدداً بازبینی کن.`);
+    }
+}
+loadGmPractice(0);
+
+/* ==================================================================
+   بخش ۵: آزمون ۵ سؤالی جامع (نمره از ۲۰ و کارنامه)
+================================================================== */
+const examQuestionsBank = [
+    { a: 1, b: -6, c: 5, d: -3, k: 4, r1: 5, r2: 1 },
+    { a: 2, b: 8, c: -10, d: 2, k: 9, r1: 1, r2: -5 },
+    { a: 1, b: 8, c: 12, d: 4, k: 4, r1: -2, r2: -6 },
+    { a: 2, b: -12, c: 10, d: -3, k: 4, r1: 5, r2: 1 },
+    { a: 1, b: -4, c: -5, d: -2, k: 9, r1: 5, r2: -1 },
+    { a: 3, b: 12, c: -15, d: 2, k: 9, r1: 1, r2: -5 },
+    { a: 1, b: 10, c: 9, d: 5, k: 16, r1: -1, r2: -9 }
+];
+
+let curExamIdx = 0;
+let examScore = 0;
+let currentExamQ = null;
+
+function startExam() {
+    curExamIdx = 0;
+    examScore = 0;
+    document.getElementById('exam-play-area').style.display = 'block';
+    document.getElementById('exam-report-area').style.display = 'none';
+    loadExamQuestion();
+}
+
+function loadExamQuestion() {
+    currentExamQ = examQuestionsBank[curExamIdx];
+    document.getElementById('exam-q-pill').textContent = `سوال ${curExamIdx + 1} از ۵`;
+    document.getElementById('exam-equation').innerHTML = eqLine(currentExamQ.a, currentExamQ.b, currentExamQ.c);
+    
+    document.getElementById('exam-in-d').value = '';
+    document.getElementById('exam-in-k').value = '';
+    document.getElementById('exam-in-x1').value = '';
+    document.getElementById('exam-in-x2').value = '';
+    document.getElementById('exam-feedback').className = 'feedback';
+}
+
+function submitExamQuestion() {
+    const inD = parseNum(document.getElementById('exam-in-d').value);
+    const inK = parseNum(document.getElementById('exam-in-k').value);
+    const inX1 = parseNum(document.getElementById('exam-in-x1').value);
+    const inX2 = parseNum(document.getElementById('exam-in-x2').value);
+
+    if (isNaN(inD) || isNaN(inK) || isNaN(inX1) || isNaN(inX2)) {
+        showFb('exam-feedback', 'err', '⚠️ لطفاً تمامی کادرها را پر کنید.');
+        return;
+    }
+
+    const gotRoots = [inX1, inX2].sort((a,b)=>a-b);
+    const expRoots = [currentExamQ.r1, currentExamQ.r2].sort((a,b)=>a-b);
+
+    const isSquareCorrect = (Math.abs(inD - currentExamQ.d) < 0.01 && Math.abs(inK - currentExamQ.k) < 0.01);
+    const areRootsCorrect = (Math.abs(gotRoots[0] - expRoots[0]) < 0.01 && Math.abs(gotRoots[1] - expRoots[1]) < 0.01);
+
+    if (isSquareCorrect && areRootsCorrect) {
+        examScore += 4;
+        showFb('exam-feedback', 'ok', '✅ پاسخ شما کاملاً درست ثبت شد!');
+    } else {
+        showFb('exam-feedback', 'err', '❌ پاسخ این سوال نادرست بود.');
+    }
+
+    setTimeout(() => {
+        curExamIdx++;
+        if (curExamIdx < 5) {
+            loadExamQuestion();
+        } else {
+            showExamReport();
+        }
+    }, 900);
+}
+
+function showExamReport() {
+    document.getElementById('exam-play-area').style.display = 'none';
+    document.getElementById('exam-report-area').style.display = 'block';
+    
+    document.getElementById('exam-final-score').textContent = examScore;
+    const evalTitle = document.getElementById('exam-eval-msg');
+    const evalDetail = document.getElementById('exam-detail-msg');
+
+    if (examScore === 20) {
+        evalTitle.textContent = `🌟 شاهکار کردی ${currentStudentName} عزیز! نمره کامل!`;
+        evalDetail.innerHTML = `شما به هر ۵ سوال پاسخ کاملاً درست دادید.<br>تسلط شما بر روش مربع کامل ۱۰۰٪ است!`;
+        triggerFlowerShower(6000);
+    } else if (examScore >= 12) {
+        evalTitle.textContent = `👏 نتیجه بسیار خوب برای ${currentStudentName}!`;
+        evalDetail.innerHTML = `شما موفق شدید نمره <b>${examScore} از ۲۰</b> را کسب کنید.<br>با یک‌بار مرور تمرین ۲، می‌توانید به نمره ۲۰ برسید.`;
+    } else {
+        evalTitle.textContent = `${currentStudentName} گرامی، نیاز به کمی تمرین بیشتر داری`;
+        evalDetail.innerHTML = `نمره شما: <b>${examScore} از ۲۰</b>.<br>پیشنهاد می‌کنیم یک‌بار دیگر بخش مثال‌ها و تمرین ۱ را مرور کنی.`;
+    }
+}
+
+/* ==================================================================
+   بخش ۶: ماشین حل‌کننده
+================================================================== */
+function toolSolve() {
+    const a = parseNum(document.getElementById('tool-a-input').value);
+    const b = parseNum(document.getElementById('tool-b-input').value);
+    const c = parseNum(document.getElementById('tool-c-input').value);
+    const eqDiv = document.getElementById('tool-equation');
+    const resDiv = document.getElementById('tool-result');
+
+    if (isNaN(a) || isNaN(b) || isNaN(c)) {
+        eqDiv.style.display = 'none';
+        resDiv.innerHTML = `<div class="feedback show err">⚠️ هر سه مقدار a, b, c رو وارد کن.</div>`;
+        return;
+    }
+    if (a === 0) {
+        eqDiv.style.display = 'none';
+        resDiv.innerHTML = `<div class="feedback show err">⚠️ ضریب a نمی‌تواند صفر باشد.</div>`;
+        return;
+    }
+
+    eqDiv.style.display = 'block';
+    eqDiv.innerHTML = eqLine(a, b, c);
+    let html = `<div class="step-box">`;
+    let currentB = b, currentC = c;
+
+    if (a !== 1) {
+        currentB = b / a;
+        currentC = c / a;
+        html += `<div style="text-align:right; margin-bottom:5px; font-size:0.95em; color:var(--text3-color);">- تقسیم بر ${bdi(a)}:</div>`;
+        html += `<div class="step-eq">${eqLine(1, currentB, currentC)}</div>`;
+    }
+
+    let rightSide = -currentC;
+    html += `<div style="text-align:right; margin-bottom:5px; font-size:0.95em; color:var(--text3-color);">- انتقال عدد ثابت به سمت راست:</div>`;
+    let leftSideEq = `x² ${currentB === 0 ? '' : (currentB>0 ? '+ '+currentB+'x' : '− '+Math.abs(currentB)+'x')}`;
+    html += `<div class="step-eq">${bdi(leftSideEq + ' = ' + rightSide)}</div>`;
+
+    let halfB = currentB / 2;
+    let square = halfB * halfB;
+    let newRightSide = rightSide + square;
+    
+    html += `<div style="text-align:right; margin-bottom:5px; font-size:0.95em; color:var(--text3-color);">- اضافه کردن توان دوی نصف ضریب (${square}) به دو طرف:</div>`;
+    html += `<div class="step-eq">${bdi(leftSideEq + ` + ${square} = ` + newRightSide)}</div>`;
+    
+    let sign = halfB >= 0 ? '+' : '−';
+    html += `<div style="text-align:right; margin-bottom:5px; font-size:0.95em; color:var(--text3-color);">- تبدیل به اتحاد مربع کامل:</div>`;
+    html += `<div class="step-eq">${bdi(`(x ${sign} ${Math.abs(halfB)})² = ${newRightSide}`)}</div>`;
+
+    if (newRightSide < 0) {
+        html += `<div style="text-align:center;color:var(--red-color);font-weight:700;margin:10px 0; font-size:1.1rem;">سمت راست منفی شد → معادله در اعداد حقیقی ریشه ندارد.</div>`;
+    } else if (newRightSide === 0) {
+        html += `<div class="result-final">یک ریشه مضاعف: x = ${-halfB}</div>`;
+    } else {
+        let rootK = Math.sqrt(newRightSide);
+        let x1 = -halfB + rootK;
+        let x2 = -halfB - rootK;
+        html += `<div class="result-final" style="font-size:1.1rem; line-height:2;">
+            x₁ = ${bdi(x1.toFixed(3))} <br>
+            x₂ = ${bdi(x2.toFixed(3))}
+        </div>`;
+    }
+    html += `</div>`;
+    resDiv.innerHTML = html;
+}
+</script>
+</body>
+</html>
