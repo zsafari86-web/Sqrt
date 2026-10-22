@@ -1478,7 +1478,8 @@ function checkGmStep4() {
         return;
     }
 
-    if (Math.abs(valL - gmProb.halfB) < 0.01 || Math.abs(valR - gmProb.halfB) < 0.01) {
+    // ✔️ اصلاح باگ: اگر نصف ضریب با توان دوی آن برابر باشد (مثل ۰ یا ۱)، سیستم نباید به اشتباه هشدار بدهد
+    if ((Math.abs(valL - gmProb.halfB) < 0.01 || Math.abs(valR - gmProb.halfB) < 0.01) && gmProb.halfB !== gmProb.sq) {
         showFb('gm-fb-4', 'warn', `⚠️ <b>خطای رایج!</b> عدد ${bdi(gmProb.halfB)} فقط نصف ضریب است؛ فراموش کردی آن را به توان ۲ برسانی! باید عددِ به توان ۲ رسیده یعنی <b>${bdi(gmProb.sq)}</b> را به هر دو طرف اضافه کنی.`);
         return;
     }
@@ -1616,7 +1617,8 @@ function checkGmRootTransition() {
         return;
     }
 
-    if (rootRes === gmProb.k) {
+    // ✔️ اصلاح باگ: اگر k برابر 1 باشد، جذر آن هم 1 است. پس هشدار "جذر نگرفتی" را فقط برای k > 1 نمایش می‌دهیم.
+    if (rootRes === gmProb.k && gmProb.k > 1) {
         showFb('gm-fb-6', 'warn', `⚠️ <b>خطای رایج!</b> یادت رفت جذر بگیری! توان دوی پرانتز حذف شده، پس باید حاصل جذر عدد ${gmProb.k} را بنویسی نه خود ${gmProb.k} را.`);
         return;
     }
@@ -1829,4 +1831,4 @@ function toolSolve() {
 }
 </script>
 </body>
-</html>
+                    </html>
